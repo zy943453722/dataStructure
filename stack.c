@@ -18,7 +18,7 @@ typedef struct stack{
 void Init(Stack **s,int n)
 {
   Stack *p = (Stack *)malloc(sizeof(Stack) + n * sizeof(int));//新malloc出一块地址指向原来的结构体，则改变
-  p = *s;
+  *s = p;//这实际上是将这个2级指针s也指向malloc出来的指针
   //s = (Stack *)malloc(sizeof(Stack));
   //s->array = (int *)malloc(sizeof(int) * n);
   p->top = -1;
@@ -99,8 +99,7 @@ void Destroy(Stack **s)
 {
   free(*s);
   *s = NULL;
-}//为了使一级指针free掉而返回的时候保存下这个改变，用2级指针传
-//此函数出问题，free之后报多次free的错误，原因？
+}
 
 int main()
 {
@@ -109,15 +108,15 @@ int main()
     scanf("%d",&n);
     Stack s;
     Stack *q = &s;
-    Init(&q,n);
-    Push(&s,5);
-    Push(&s,6);
-    Push(&s,7);
-    Top(&s);
-    Print(&s);
+    Init(&q,n);//这个函数返回回来之后q这个指针的已经改变，并不指向原来的s了，指向malloc的地址，而s的地址还是原来的地址
+    Push(q,5);
+    Push(q,6);
+    Push(q,7);
+    Top(q);
+    Print(q);
     printf("\n");
-    int a = Pop(&s);
-    Print(&s);
+    int a = Pop(q);
+    Print(q);
     Destroy(&q);
     return 0;
 }
