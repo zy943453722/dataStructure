@@ -94,7 +94,6 @@ void Print(Stack *s)
         printf("%10d\n",s->array[i]);
     }
 }
-
 void Destroy(Stack **s)
 {
   free(*s);
